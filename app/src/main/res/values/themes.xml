@@ -2,9 +2,18 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.GithubUser" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/smokeWhite</item>
+        <item name="colorPrimary">@color/smokeWhite</item>
         <item name="colorSecondary">@color/beige</item>
     </style>
 
     <style name="Theme.GithubUser" parent="Base.Theme.GithubUser" />
+
+    <style name="Theme.GithubUser.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.GithubUser.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.GithubUser.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
