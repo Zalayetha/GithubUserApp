@@ -1,4 +1,4 @@
-package com.zaghy.githubuser.adapter
+package com.zaghy.githubuser.view.adapter
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment

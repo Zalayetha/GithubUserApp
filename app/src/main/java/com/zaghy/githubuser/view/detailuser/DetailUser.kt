@@ -7,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.zaghy.githubuser.R
-import com.zaghy.githubuser.adapter.SectionPagesAdapter
+import com.zaghy.githubuser.view.adapter.SectionPagesAdapter
 import com.zaghy.githubuser.databinding.ActivityDetailUserBinding
 
 class DetailUser : AppCompatActivity() {
