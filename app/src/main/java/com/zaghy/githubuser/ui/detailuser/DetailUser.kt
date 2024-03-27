@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.zaghy.githubuser.R
-import com.zaghy.githubuser.data.response.UserDetailResponse
+import com.zaghy.githubuser.data.remote.response.UserDetailResponse
 import com.zaghy.githubuser.databinding.ActivityDetailUserBinding
 import com.zaghy.githubuser.ui.adapter.SectionPagesAdapter
 import com.zaghy.githubuser.ui.main.MainActivity
@@ -78,7 +78,7 @@ class DetailUser : AppCompatActivity() {
         Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show()
     }
 
-    private fun setDetailUser(detailUser:UserDetailResponse) {
+    private fun setDetailUser(detailUser: UserDetailResponse) {
         Glide.with(this).load(detailUser.avatarUrl).into(binding.circleImageView)
         binding.name.text = detailUser.name
         binding.username.text = detailUser.login

@@ -1,4 +1,4 @@
-package com.zaghy.githubuser.datastore
+package com.zaghy.githubuser.data.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -4,9 +4,9 @@ package com.zaghy.githubuser.ui.detailuser
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zaghy.githubuser.data.response.ItemsItem
-import com.zaghy.githubuser.data.response.UserDetailResponse
-import com.zaghy.githubuser.data.retrofit.ApiConfig
+import com.zaghy.githubuser.data.remote.response.ItemsItem
+import com.zaghy.githubuser.data.remote.response.UserDetailResponse
+import com.zaghy.githubuser.data.remote.retrofit.ApiConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

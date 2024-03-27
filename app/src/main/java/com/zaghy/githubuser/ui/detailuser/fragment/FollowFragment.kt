@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.zaghy.githubuser.data.response.ItemsItem
+import com.zaghy.githubuser.data.remote.response.ItemsItem
 import com.zaghy.githubuser.databinding.FragmentFollowBinding
 import com.zaghy.githubuser.ui.adapter.RecyclerViewAdapter
 import com.zaghy.githubuser.ui.detailuser.DetailUserViewModel

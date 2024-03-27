@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.zaghy.githubuser.data.response.ItemsItem
-import com.zaghy.githubuser.data.response.UserListResponse
-import com.zaghy.githubuser.data.retrofit.ApiConfig
-import com.zaghy.githubuser.datastore.SettingsPreferences
+import com.zaghy.githubuser.data.remote.response.ItemsItem
+import com.zaghy.githubuser.data.remote.response.UserListResponse
+import com.zaghy.githubuser.data.remote.retrofit.ApiConfig
+import com.zaghy.githubuser.data.datastore.SettingsPreferences
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

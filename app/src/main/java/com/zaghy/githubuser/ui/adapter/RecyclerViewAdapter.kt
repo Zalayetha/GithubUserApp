@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.zaghy.githubuser.data.response.ItemsItem
+import com.zaghy.githubuser.data.remote.response.ItemsItem
 import com.zaghy.githubuser.databinding.CardUserGithubBinding
 
 
@@ -37,7 +37,7 @@ class RecyclerViewAdapter:ListAdapter<ItemsItem,RecyclerViewAdapter.MyViewHolder
         this.onItemCallback = callback
     }
     class MyViewHolder(val binding: CardUserGithubBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(user:ItemsItem){
+        fun bind(user: ItemsItem){
             binding.username.text = user.login
             Glide
                 .with(binding.root)

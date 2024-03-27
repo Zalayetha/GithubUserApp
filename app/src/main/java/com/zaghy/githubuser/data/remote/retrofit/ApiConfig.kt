@@ -1,4 +1,4 @@
-package com.zaghy.githubuser.data.retrofit
+package com.zaghy.githubuser.data.remote.retrofit
 
 
 import com.zaghy.githubuser.BuildConfig
@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiConfig {
     companion object{
-        fun getApiService():ApiService{
+        fun getApiService(): ApiService {
             val loggingInterceptor = if(BuildConfig.DEBUG){
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             }else{
