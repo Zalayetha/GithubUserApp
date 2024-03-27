@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/favoriteUser"
+        android:icon="@drawable/favorite24"
+        android:title="@string/menu_fav"
+        app:showAsAction="ifRoom">
+
+    </item>
+    <item
+        android:id = "@+id/switchmode"
+        android:icon = "@drawable/darkmode24"
+        android:title = "@string/menu_switch"
+        app:showAsAction = "ifRoom">
+    </item>
+
+</menu>

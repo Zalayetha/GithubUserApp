@@ -1,11 +1,12 @@
 package com.zaghy.githubuser.ui.detailuser
 
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -13,8 +14,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.zaghy.githubuser.R
 import com.zaghy.githubuser.data.response.UserDetailResponse
-import com.zaghy.githubuser.ui.adapter.SectionPagesAdapter
 import com.zaghy.githubuser.databinding.ActivityDetailUserBinding
+import com.zaghy.githubuser.ui.adapter.SectionPagesAdapter
 import com.zaghy.githubuser.ui.main.MainActivity
 
 class DetailUser : AppCompatActivity() {
@@ -61,7 +62,20 @@ class DetailUser : AppCompatActivity() {
         viewModel.isLoading.observe(this){
             showLoading(it)
         }
+        viewModel.hasError.observe(this){ it ->
+            if (it){
+                viewModel.errorMessage.observe(this){errorMsg->
+                    showToast(errorMsg)
+                }
+            }
 
+
+        }
+
+    }
+
+    private fun showToast(errorMessage:String) {
+        Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show()
     }
 
     private fun setDetailUser(detailUser:UserDetailResponse) {

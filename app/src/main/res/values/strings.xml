@@ -4,13 +4,10 @@
     <string name="title_activity_detail_user">Detail</string>
     <string name="username_github">User Name Github</string>
     <string name="name_github_user">Name</string>
-    <string name="company_name">Nama Perusahaan</string>
     <string name="bio">andaikan dulu ka tak pergi dari hidupku, takkan mungkin kutemui cinta yang kini kumiliki, cinta yang menerima kekurangan dan merubah caraku blablabla dunia.</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
-    <string name="location">Lokasi</string>
     <string name="tabs">Tabs</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="error">Data Tidak Ditemukan</string>
+    <string name="menu_switch">Switch Mode</string>
+    <string name="menu_fav">Favorite</string>
 </resources>
