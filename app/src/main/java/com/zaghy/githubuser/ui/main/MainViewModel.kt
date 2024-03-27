@@ -1,4 +1,4 @@
-package com.zaghy.githubuser.viewmodel
+package com.zaghy.githubuser.ui.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -23,10 +23,10 @@ class MainViewModel : ViewModel(){
     val isLoading: LiveData<Boolean> = _isLoading
 
     init {
-        _isLoading.value = true
-        findUserGithub(userName = "sidiq")
+//        _isLoading.value = true
+        findUserGithub()
     }
-    private fun findUserGithub(userName: String = "a"){
+    fun findUserGithub(userName: String = "a"){
          _isLoading.value = true
         val client = ApiConfig.getApiService().getUserByWord(userName)
         client.enqueue(object: Callback<UserListResponse>{
@@ -39,6 +39,7 @@ class MainViewModel : ViewModel(){
                     _userListItems.value = response.body()?.items
                 }else{
                     Log.e(TAG,"onFailure ${response.message()}")
+                    Log.e(TAG,"status : ${response.code()}")
                 }
             }
 

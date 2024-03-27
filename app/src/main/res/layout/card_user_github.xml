@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:background="@color/beige">
+        android:background="?attr/colorSecondary">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_photo"
@@ -39,7 +39,8 @@
             card_user_github:layout_constraintBottom_toBottomOf="parent"
             card_user_github:layout_constraintStart_toEndOf="@+id/user_photo"
             card_user_github:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/username_github">
+            tools:text="@string/username_github"
+            >
 
         </TextView>
 

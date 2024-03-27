@@ -1,5 +1,6 @@
 package com.zaghy.githubuser.data.retrofit
 
+import com.zaghy.githubuser.data.response.ItemsItem
 import com.zaghy.githubuser.data.response.UserDetailResponse
 import com.zaghy.githubuser.data.response.UserFollowersResponse
 import com.zaghy.githubuser.data.response.UserFollowingResponse
@@ -16,8 +17,8 @@ interface ApiService {
     fun getDetailUser(@Path("username") username:String):Call<UserDetailResponse>
 
     @GET("users/{username}/followers")
-    fun getFollowersUser(@Path("username") username: String):Call<UserFollowersResponse>
+    fun getFollowersUser(@Path("username") username: String):Call<List<ItemsItem>>
 
     @GET("users/{username}/following")
-    fun getFollowingUser(@Path("username") username:String):Call<UserFollowingResponse>
+    fun getFollowingUser(@Path("username") username:String):Call<List<ItemsItem>>
 }
