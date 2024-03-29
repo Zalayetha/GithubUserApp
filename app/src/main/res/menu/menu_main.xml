@@ -4,15 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/favoriteUser"
-        android:icon="@drawable/favorite24"
+        android:icon="@drawable/favoritefill24"
         android:title="@string/menu_fav"
         app:showAsAction="ifRoom">
 
     </item>
     <item
-        android:id = "@+id/switchmode"
-        android:icon = "@drawable/darkmode24"
-        android:title = "@string/menu_switch"
+        android:id = "@+id/settings"
+        android:icon = "@drawable/settings_24px"
+        android:title = "@string/darkmode"
         app:showAsAction = "ifRoom">
     </item>
 

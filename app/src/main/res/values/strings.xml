@@ -8,6 +8,10 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="tabs">Tabs</string>
-    <string name="menu_switch">Switch Mode</string>
+    <string name="darkmode">Dark Mode</string>
     <string name="menu_fav">Favorite</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="data_tidak_ditemukan">Data Tidak Ditemukan</string>
+    <string name="floating_action_button_favorite">Floating Action Button Favorite</string>
 </resources>

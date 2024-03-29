@@ -2,128 +2,142 @@ package com.zaghy.githubuser.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.zaghy.githubuser.R
+import com.zaghy.githubuser.data.Result
 import com.zaghy.githubuser.data.remote.response.ItemsItem
 import com.zaghy.githubuser.databinding.ActivityMainBinding
-import com.zaghy.githubuser.data.datastore.SettingsPreferences
-import com.zaghy.githubuser.data.datastore.dataStore
 import com.zaghy.githubuser.ui.adapter.RecyclerViewAdapter
 import com.zaghy.githubuser.ui.detailuser.DetailUser
+import com.zaghy.githubuser.ui.favorite.FavoriteActivity
+import com.zaghy.githubuser.ui.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityMainBinding
-    private lateinit var  recyclerView:RecyclerView
-    private lateinit var viewModel:MainViewModel
+    private lateinit var binding: ActivityMainBinding
+
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModelFactory.getInstance(application)
+    }
+
     companion object {
         const val USERNAME = "username"
+        const val TAG = "mainAct"
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        set data store preferences
-        val pref = SettingsPreferences.getInstance(application.dataStore)
-        viewModel = ViewModelProvider(this,MainViewModelFactory(pref))[MainViewModel::class.java]
+
 
 //        Searchbar
-        viewModel.getThemeSettings().observe(this){isDarkModeActive->
-            if(isDarkModeActive) {
-                binding.searchBar.inflateMenu(R.menu.menu_main_dark)
-            }else{
-                binding.searchBar.inflateMenu(R.menu.menu_main_light)
-            }
-        }
+        binding.searchBar.inflateMenu(R.menu.menu_main)
 
-        binding.searchBar.setOnMenuItemClickListener {item->
-            when(item.itemId){
-                R.id.switchmode->{
-                    toggleSwitchMode(viewModel.isCheckedMode.value ?: false)
-                    if(viewModel.isCheckedMode.value == true){
-                        item.icon = AppCompatResources.getDrawable(this,R.drawable.lightmode24)
-                    }else{
-                        item.icon = AppCompatResources.getDrawable(this,R.drawable.darkmode24)
-                    }
-
+        binding.searchBar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.settings -> {
+                    val intentSettings = Intent(this, SettingsActivity::class.java)
+                    startActivity(intentSettings)
                 }
-                R.id.favoriteUser->{
-                    toggleSwitchFavorite(viewModel.isCheckedFavorite.value ?: false)
-                    if(viewModel.isCheckedFavorite.value == true){
-                        item.icon = AppCompatResources.getDrawable(this,R.drawable.favorite24)
-                    }else{
-                        item.icon = AppCompatResources.getDrawable(this,R.drawable.favoritefill24)
-                    }
+
+                R.id.favoriteUser -> {
+                    val intentFavorite = Intent(this,FavoriteActivity::class.java)
+                    startActivity(intentFavorite)
                 }
             }
             true
         }
 //        Searchview
-        with(binding){
-            searchView.setupWithSearchBar(searchBar)
-            searchView.editText.setOnEditorActionListener { _, _, _ ->
-                searchBar.setText(searchView.text)
-                searchView.hide()
-                viewModel.findUserGithub(searchView.text.toString().trim())
-                false
+        binding.searchView.setupWithSearchBar(binding.searchBar)
+        binding.searchView.editText.setOnEditorActionListener { _, _, _ ->
+            binding.searchBar.setText(binding.searchView.text)
+            binding.searchView.hide()
+            viewModel.findUserGithub(binding.searchView.text.toString().trim()).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
+
+                        is Result.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            val userList = result.data
+                            viewModel.setUserListItems(userList)
+
+                        }
+
+                        is Result.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(
+                                this,
+                                "Terjadi kesalahan" + result.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
             }
+            false
         }
 
-
-//        recyclerView
-        recyclerView = binding.recyclerViewuser
-        recyclerView.setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-
-        viewModel.userListItems.observe(this){user->
-            setUserList(user)
+        viewModel.userListItems.observe(this){userList->
+            setUserList(userList)
         }
-        viewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-        viewModel.getThemeSettings().observe(this){isDarkModeActive->
-            if(isDarkModeActive){
+
+        viewModel.getThemeSettings().observe(this){isDarkActivated->
+            if (isDarkActivated) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }else{
+            } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
 
+//        recyclerView
+        binding.recyclerViewuser.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+        }
+        viewModel.userListItems.observe(this) { user ->
+            setUserList(user)
+        }
+
 
     }
 
-    private fun toggleSwitchMode(status:Boolean){
-        viewModel.toggleSwitchMode(status)
-    }
-
-    private fun toggleSwitchFavorite(status:Boolean){
-        viewModel.toggleSwitchFavorite(status)
-    }
-
-
-    private fun setUserList(user: List<ItemsItem>?){
-        if((user?.size ?: 0) > 0){
+    private fun setUserList(user: List<ItemsItem>?) {
+        if ((user?.size ?: 0) > 0) {
             binding.recyclerViewuser.visibility = View.VISIBLE
             binding.errormsg.visibility = View.GONE
-            val adapter = RecyclerViewAdapter()
-            adapter.submitList(user)
-            adapter.setOnItemCallback(object:RecyclerViewAdapter.OnItemClickCallback{
-                override fun onItemClicked(username: String) {
-                    val intentDetailUser = Intent(this@MainActivity,DetailUser::class.java)
-                    intentDetailUser.putExtra(USERNAME,username)
+            val adapter = RecyclerViewAdapter<ItemsItem>(
+                diffCallback = object : DiffUtil.ItemCallback<ItemsItem>() {
+                    override fun areItemsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
+                        return oldItem == newItem // Assuming ItemsItem has an id
+                    }
+
+                    override fun areContentsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
+                        return oldItem == newItem
+                    }
+                },
+                bindView = { item, binding ->
+                    binding.username.text = item.login
+                    Glide.with(binding.root).load(item.avatarUrl).into(binding.userPhoto)
+                },
+                itemClick = { item ->
+                    val intentDetailUser = Intent(this@MainActivity, DetailUser::class.java)
+                    intentDetailUser.putExtra(USERNAME, item.login)
                     startActivity(intentDetailUser)
                 }
-
-            })
+            )
+            adapter.submitList(user)
             binding.recyclerViewuser.adapter = adapter
-        }else{
+        } else {
             binding.recyclerViewuser.visibility = View.GONE
             binding.errormsg.text = "Data Tidak Ditemukan"
             binding.errormsg.visibility = View.VISIBLE
@@ -131,10 +145,4 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-    fun showLoading(isLoading:Boolean){
-        Log.d("MainAct","load")
-        Log.d("MainAct",isLoading.toString())
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
-
 }

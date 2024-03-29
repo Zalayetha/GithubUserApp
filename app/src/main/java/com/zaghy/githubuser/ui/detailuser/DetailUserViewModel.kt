@@ -1,131 +1,72 @@
 package com.zaghy.githubuser.ui.detailuser
 
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.zaghy.githubuser.data.local.entity.FavoriteUser
 import com.zaghy.githubuser.data.remote.response.ItemsItem
 import com.zaghy.githubuser.data.remote.response.UserDetailResponse
-import com.zaghy.githubuser.data.remote.retrofit.ApiConfig
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.zaghy.githubuser.data.repository.GithubUserRepository
+import kotlinx.coroutines.launch
 
-class DetailUserViewModel : ViewModel() {
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading = _isLoading
+class DetailUserViewModel(private val githubUserRepository: GithubUserRepository) : ViewModel() {
 
     private val _detailUser = MutableLiveData<UserDetailResponse>()
-    val detailUser = _detailUser
+    val detailUser  = _detailUser
 
-    private val _followersData = MutableLiveData<List<ItemsItem>>()
-    val followersData = _followersData
+    private val _followers = MutableLiveData<List<ItemsItem>>()
+    val followers = _followers
 
-    private val _followingData = MutableLiveData<List<ItemsItem>>()
-    val followingData = _followingData
+    private val _following = MutableLiveData<List<ItemsItem>>()
+    val following = _following
 
-    private val _username = MutableLiveData<String>()
-    val username = _username
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite = _isFavorite
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage = _errorMessage
-
-    private val _hasError = MutableLiveData<Boolean>()
-    val hasError = _hasError
+    private val _isActivated = MutableLiveData<Boolean>()
+    val isActivated = _isActivated
 
     companion object {
         private const val TAG = "detail_user_view_model"
     }
 
-    init {
-        _username.value = ""
+    fun setFavorite(isFavorite: Boolean) {
+        _isFavorite.value = isFavorite
     }
 
-    fun setUsername(username: String) {
-        _username.value = username
+    fun setActivated(isActivated: Boolean) {
+        _isActivated.value = isActivated
     }
 
-    fun findDetailUserGithub(username: String) {
-        _isLoading.value = true
-        _hasError.value = false
-        val client = ApiConfig.getApiService().getDetailUser(username)
-        client.enqueue(object : Callback<UserDetailResponse> {
-            override fun onResponse(
-                call: Call<UserDetailResponse>,
-                response: Response<UserDetailResponse>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _detailUser.value = response.body()
-                } else {
-                    Log.e(TAG, "status : ${response.code()}")
-                    Log.e(TAG, "OnFailure ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<UserDetailResponse>, t: Throwable) {
-                Log.e(TAG, "OnFailure ${t.message.toString()}")
-                _hasError.value = true
-                _errorMessage.value = t.message.toString()
-
-            }
-
-        })
+    fun setDetailUser(data:UserDetailResponse){
+        _detailUser.value = data
+    }
+    fun setFollowers(data:List<ItemsItem>){
+        _followers.value = data
+    }
+    fun setFollowing(data:List<ItemsItem>){
+        _following.value = data
     }
 
-    fun getFollowers(username: String) {
-        _isLoading.value = true
-        _hasError.value = false
-        val client = ApiConfig.getApiService().getFollowersUser(username)
-        client.enqueue(object : Callback<List<ItemsItem>> {
-            override fun onResponse(
-                call: Call<List<ItemsItem>>,
-                response: Response<List<ItemsItem>>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _followersData.value = response.body()
-                } else {
-                    Log.e(TAG, "status : ${response.code()}")
-                    Log.e(TAG, "OnFailure ${response.message()}")
-                }
-            }
+    fun getDetailUser(username: String) = githubUserRepository.findDetailUserGithub(username)
+    fun getFollowers(username: String) = githubUserRepository.getFollowers(username)
+    fun getFollowing(username: String) = githubUserRepository.getFollowing(username)
 
-            override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
-                Log.e(TAG, "OnFailure ${t.message.toString()}")
-                _hasError.value = true
-                _errorMessage.value = t.message.toString()
-            }
-
-        })
+    fun addFavoriteUser(data: FavoriteUser) {
+        viewModelScope.launch {
+            githubUserRepository.addFavoriteGithubUser(data)
+        }
     }
 
-    fun getFollowing(username: String) {
-        _isLoading.value = true
-        _hasError.value = false
-        val client = ApiConfig.getApiService().getFollowingUser(username)
-        client.enqueue(object : Callback<List<ItemsItem>> {
-            override fun onResponse(
-                call: Call<List<ItemsItem>>,
-                response: Response<List<ItemsItem>>
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _followingData.value = response.body()
-                } else {
-                    Log.e(TAG, "status : ${response.code()}")
-                    Log.e(TAG, "OnFailure ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<List<ItemsItem>>, t: Throwable) {
-                Log.e(TAG, "OnFailure ${t.message.toString()}")
-                _hasError.value = true
-                _errorMessage.value = t.message.toString()
-            }
-
-        })
+    fun deleteFavoriteUser(data: FavoriteUser) {
+        viewModelScope.launch {
+            githubUserRepository.deleteFavoriteUser(data)
+        }
     }
+
+    fun checkFavoriteUser(username: String) =
+        githubUserRepository.getFavoriteGithubUserByUsername(username)
 
 
 }

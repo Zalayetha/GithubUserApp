@@ -18,10 +18,8 @@ abstract class FavoriteUserDatabase: RoomDatabase() {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     FavoriteUserDatabase::class.java,
-                    "favorite_user.db"
+                    "favorite.db"
                 ).build()
-            }.also {
-                instance = it
             }
     }
 }

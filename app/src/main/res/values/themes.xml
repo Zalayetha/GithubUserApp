@@ -31,5 +31,9 @@
         <item name="android:homeAsUpIndicator">@drawable/up_btn_white24</item>
     </style>
 
-
+    <style name="SplashScreenStyle" parent="Theme.AppCompat.DayNight">
+        <item name="colorPrimaryVariant">?attr/colorPrimary</item>
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    </style>
 </resources>
